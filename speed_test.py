@@ -7,16 +7,12 @@ Created on Sat Sep 26 10:49:46 2020
 
 import random
 import time
-b = 0
 #Из этой строки будем рандомно имититовать названия городов
 c = "QWERTYUIOPASDFGHJKLZXCVBNM"
-d = []
 cities= []
-#Создаем список букв из строки
-for i in c:
-	d.append(i)
 
 #Рандомно создаем имитацию списка городов из 20000 наименований
+b = 0 #количество итераций
 while b <= 20000:
 	e = ""
 	for i in range(random.randint(3, 5)):
@@ -25,7 +21,6 @@ while b <= 20000:
 			e += c[random.randint(0, len(c) - 1)]
 			j += 1
 	cities.append(e)
-	
 	b += 1
 
 #С помощью сета удаляем дубли, знаю, что можно было сразу
@@ -70,10 +65,11 @@ print('____________________')
 print('РЕШЕНИЕ ЗАДАЧИ РАСПАРСИВАНИЕМ СЛОВАРЕЙ ИЗ СПИСКА ЧЕРЕЗ VALUE()')
 
 a = float(time.time())
+#создаем финальный словарь индексации
 c = dict()
 try:
 	city[0]
-except:
+except IndexError:
 	print("Вы не ввели город.")
 else:
 	if city in cities:
@@ -81,9 +77,10 @@ else:
 			if city in v.values():
 				print(f"Турист {v['user']['name']} возраст {v['user']['age']}. Посетил город  {city}.")
 	else:
-		print("Нет такого города!")
+		print("Такого города в списке нет.")
 b = float(time.time())
 print(f"Парсинг через value(): {(b - a):.20}")
+#добавляем данные в финальный словарь который будем индексировать по возрастанию
 c["value"] = (b - a)
 
 #------------------
@@ -96,7 +93,7 @@ print('РЕШЕНИЕ ЗАДАЧИ РАСПАРСИВАНИЕМ СЛОВАРЕЙ
 a = float(time.time())
 try:
 	city[0]
-except:
+except IndexError:
 	print("Вы не ввели город.")
 else:
 	if city in cities:
@@ -107,6 +104,7 @@ else:
 		print("Такого города в списке нет.")
 b = float(time.time())
 print(f"Парсинг через enumerate(): {(b - a):.20}")
+#добавляем данные в финальный словарь который будем индексировать по возрастанию
 c["enumerate"] = (b - a)
 
 #---------------------
@@ -120,7 +118,7 @@ print('РЕШЕНИЕ ЗАДАЧИ РАСПАРСИВАНИЕМ СЛОВАРЕЙ
 a = float(time.time())
 try:
 	city[0]
-except:
+except IndexError:
 	print("Вы не ввели город.")
 else:
 	if city in cities:
@@ -131,6 +129,7 @@ else:
 		print("Такого города в списке нет.")
 b = float(time.time())
 print(f"Парсинг через iter(): {(b - a):.20}")
+#добавляем данные в финальный словарь который будем индексировать по возрастанию
 c["iter"] = (b - a)
 
 #------------
@@ -142,21 +141,32 @@ print('____________________')
 print('РЕШЕНИЕ ЗАДАЧИ ПРЯМЫМ РАСПАРСИВАНИЕМ СЛОВАРЕЙ ИЗ СПИСКА')
 
 a = float(time.time())
-if city in cities:
-	for i in tourists:
-		for key in i:
-			if i[key] == city:
-				for j in i:
-					if j == 'user':
-						print(f"Турист {i[j]['name']} возраст {i[j]['age']}. Посетил город {city}.")
+try:
+	city[0]
+except IndexError:
+	print("Вы не ввели город.")
 else:
-	print("Нет такого города...")
+    if city in cities:
+        for i in tourists:
+            for key in i:
+                if i[key] == city:
+                    for j in i:
+                        if j == 'user':
+                            print(f"Турист {i[j]['name']} возраст {i[j]['age']}. Посетил город {city}.")
+    else:
+        print("Такого города в списке нет.")
+        
 b = float(time.time())
 print(f"Прямой парсинг словарей из списков: {(b - a):.20}")
+#добавляем данные в финальный словарь который будем индексировать по возрастанию
 c["Прямой"] = (b - a)
+
+#Финальный словарь индексации
 print("----------")
+print('ПОЛУЧИВШИЙСЯ СЛОВАРЬ:')
 print(c)
 print("----------")
+#сортируем данные словаря
 print("СРАВНЕНИЕ СКОРОСТИ ПО ВОЗРАСТАНИЮ.")
 list_c = list(c.items())
 list_c.sort(key=lambda i: i[1])
